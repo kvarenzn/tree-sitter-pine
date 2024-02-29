@@ -1,0 +1,19 @@
+{
+	"name": "tree-sitter-pine",
+	"version": "1.0.0",
+	"description": "",
+	"main": "bindings/node",
+	"scripts": {
+		"build": "tree-sitter generate && node-gyp build",
+		"parse": "tree-sitter parse",
+		"test": "tree-sitter test"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"nan": "^2.18.0"
+	},
+	"devDependencies": {
+		"tree-sitter-cli": "^0.21.0"
+	}
+}
