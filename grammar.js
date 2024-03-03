@@ -1,6 +1,5 @@
 const PREC = {
 	conditional: -1,
-	parenthesized_expression: 1,
 	or: 10,
 	and: 11,
 	compare: 12,
@@ -8,6 +7,7 @@ const PREC = {
 	times: 14,
 	unary: 15,
 	call: 16,
+	attribute: 17
 }
 
 
@@ -21,9 +21,9 @@ module.exports = grammar({
 	],
 
 	conflicts: $ => [
-		[$.primary_expression, $.type],
-		[$.tuple_declaration_statement, $.primary_expression],
 		[$.function_declaration_statement, $.primary_expression],
+		[$.primary_expression, $.base_type],
+		[$.tuple_declaration_statement, $.primary_expression],
 		[$._argument_list_with_type_optional, $._argument_list_with_type_optional1]
 	],
 
@@ -43,7 +43,7 @@ module.exports = grammar({
 		$.expression,
 		$.literals,
 		$.primary_expression,
-		$.type
+		$.type,
 	],
 
 	rules: {
@@ -313,6 +313,7 @@ module.exports = grammar({
 			$.comparison_operation,
 			$.math_operation,
 			$.unary_operation,
+			$.template_argument_list,
 			$.literals,
 			$.primary_expression,
 		),
@@ -333,17 +334,26 @@ module.exports = grammar({
 			$.string,
 			$.tuple,
 		),
-		attribute: $ => prec(PREC.call, seq(
-			field('object', $.primary_expression),
-			'.',
-			field('attribute', $.identifier)
+		template_function: $ => seq(
+			field('name', $.identifier),
+			field('arguments', $.template_argument_list)
+		),
+		attribute: $ => prec.right(seq(
+			prec(PREC.attribute, seq(
+				field('object', $.primary_expression),
+				'.',
+			)),
+			field('attribute', choice(
+				$.identifier,
+				$.template_function,
+			))
 		)),
 		keyword_argument: $ => seq(
 			field('key', $.identifier),
 			'=',
 			field('value', $.expression)
 		),
-		arguments_list: $ => seq(
+		argument_list: $ => seq(
 			'(',
 			optional(sep1(choice(
 				$.expression,
@@ -352,9 +362,8 @@ module.exports = grammar({
 			')'
 		),
 		call: $ => prec(PREC.call, seq(
-			field('function', $.primary_expression),
-			optional(field('type_parameters', $._type_parameters)),
-			field('arguments', $.arguments_list)
+			field('function', $.expression),
+			field('arguments', $.argument_list)
 		)),
 		subscript: $ => prec(PREC.call, seq(
 			field('series', $.primary_expression),
@@ -363,22 +372,22 @@ module.exports = grammar({
 			']'
 		)),
 		conditional_expression: $ => prec.right(PREC.conditional, seq(
-			$.expression,
+			field('condition', $.expression),
 			'?',
-			$.expression,
+			field('if_branch', $.expression),
 			':',
-			$.expression
+			field('else_branch', $.expression)
 		)),
 		tuple: $ => seq(
 			'[',
 			sep1($.expression, ','),
 			']'
 		),
-		parenthesized_expression: $ => prec(PREC.parenthesized_expression, seq(
+		parenthesized_expression: $ => seq(
 			'(',
 			$.expression,
 			')'
-		)),
+		),
 		logical_operation: $ => choice(
 			prec.left(PREC.and, seq(
 				field('left', $.expression),
@@ -414,23 +423,28 @@ module.exports = grammar({
 			field('operator', choice('<', '<=', '==', '!=', '>', '>=')),
 			field('right', $.expression)
 		)),
-		type: $ => prec.dynamic(-1, choice(
+		type: $ => choice(
 			$.array_type,
-			$.template_type,
-			field('type_name', $.identifier),
-		)),
+			$.generic_type,
+			$.base_type,
+		),
+		base_type: $ => sep1($.identifier, '.'),
 		array_type: $ => seq(
-			$.type,
-			'[', ']'
+			field('base_type', $._array_base_type),
+			field('suffix', seq('[', ']'))
 		),
-		template_type: $ => seq(
-			$.type,
-			$._type_parameters
+		_array_base_type: $ => choice(
+			$.base_type,
+			$.array_type
 		),
-		_type_parameters: $ => seq(
+		generic_type: $ => seq(
+			field('base_type', $.base_type),
+			field('arguments', $.template_argument_list)
+		),
+		template_argument_list: $ => seq(
 			'<',
 			sep1($.type, ','),
-			'>'
+			alias(token(prec(1, '>')), '>')
 		),
 		type_qualifier: _ => choice(
 			'series',
