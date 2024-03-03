@@ -143,7 +143,7 @@ module.exports = grammar({
 		type_definition_statement: $ => seq(
 			optional('export'),
 			'type',
-			field('type_name', $.identifier),
+			field('name', $.identifier),
 			$._indent,
 			repeat1(seq(
 				field('field_type', $.type),

@@ -166,7 +166,7 @@
   ["<" ">"] @punctuation)
 
 (type_definition_statement
-  type_name: (identifier) @type.definition)
+  name: (identifier) @type.definition)
 
 (import_statement
   path: (import_path) @label)
