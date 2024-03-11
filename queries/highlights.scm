@@ -259,6 +259,7 @@
 (escape_sequence) @string.escape
 
 (comment) @comment
+(annotations) @text.reference
 
 (base_type
   (identifier) @type)

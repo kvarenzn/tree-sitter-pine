@@ -16,6 +16,10 @@
         "named": true
       },
       {
+        "type": "logical_operation",
+        "named": true
+      },
+      {
         "type": "math_operation",
         "named": true
       },
@@ -336,6 +340,21 @@
     }
   },
   {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "break_statement",
     "named": true,
     "fields": {}
@@ -379,6 +398,10 @@
             "named": false
           },
           {
+            "type": "block",
+            "named": true
+          },
+          {
             "type": "statement",
             "named": true
           }
@@ -394,6 +417,25 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "comment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "annotations",
+          "named": true
+        },
+        {
+          "type": "comment_content",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -522,11 +564,11 @@
     "named": true,
     "fields": {
       "consequence": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
-            "type": "statement",
+            "type": "block",
             "named": true
           }
         ]
@@ -548,11 +590,11 @@
         ]
       },
       "consequence": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
-            "type": "statement",
+            "type": "block",
             "named": true
           }
         ]
@@ -599,11 +641,11 @@
         ]
       },
       "body": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
-            "type": "statement",
+            "type": "block",
             "named": true
           }
         ]
@@ -625,11 +667,11 @@
     "named": true,
     "fields": {
       "body": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
-            "type": "statement",
+            "type": "block",
             "named": true
           }
         ]
@@ -697,6 +739,10 @@
           {
             "type": "=>",
             "named": false
+          },
+          {
+            "type": "block",
+            "named": true
           },
           {
             "type": "statement",
@@ -811,16 +857,21 @@
         ]
       },
       "consequence": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
-            "type": "statement",
+            "type": "block",
             "named": true
           }
         ]
       }
     }
+  },
+  {
+    "type": "import_path",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "import_statement",
@@ -863,6 +914,46 @@
         ]
       },
       "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "logical_operation",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "and",
+            "named": false
+          },
+          {
+            "type": "or",
+            "named": false
+          }
+        ]
+      },
+      "right": {
         "multiple": false,
         "required": true,
         "types": [
@@ -950,7 +1041,7 @@
         "required": true,
         "types": [
           {
-            "type": "expression",
+            "type": "expression_statement",
             "named": true
           }
         ]
@@ -1073,6 +1164,10 @@
             "named": false
           },
           {
+            "type": "block",
+            "named": true
+          },
+          {
             "type": "case_clause",
             "named": true
           },
@@ -1089,6 +1184,10 @@
           {
             "type": "=>",
             "named": false
+          },
+          {
+            "type": "block",
+            "named": true
           },
           {
             "type": "statement",
@@ -1390,7 +1489,7 @@
         "required": false,
         "types": [
           {
-            "type": "expression",
+            "type": "expression_statement",
             "named": true
           }
         ]
@@ -1432,11 +1531,11 @@
     "named": true,
     "fields": {
       "body": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
-            "type": "statement",
+            "type": "block",
             "named": true
           }
         ]
@@ -1518,6 +1617,10 @@
     "named": false
   },
   {
+    "type": "//",
+    "named": false
+  },
+  {
     "type": "/=",
     "named": false
   },
@@ -1574,6 +1677,10 @@
     "named": false
   },
   {
+    "type": "annotations",
+    "named": true
+  },
+  {
     "type": "as",
     "named": false
   },
@@ -1590,7 +1697,7 @@
     "named": true
   },
   {
-    "type": "comment",
+    "type": "comment_content",
     "named": true
   },
   {
@@ -1636,10 +1743,6 @@
   {
     "type": "import",
     "named": false
-  },
-  {
-    "type": "import_path",
-    "named": true
   },
   {
     "type": "in",

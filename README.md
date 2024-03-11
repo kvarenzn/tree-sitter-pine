@@ -8,10 +8,10 @@ The author himself has no association with tradingview.
 - [X] Basic grammar
 - [X] Highlighting query
 - [X] Builtin variables, constants and functions highlighting
+- [X] Annotations highlighting in comments
 
 ## TODO
-- [ ] Indent query
-- [ ] Annotations highlighting in comments
+- [ ] <del>Indent query</del> (no idea)
 
 ## References
 - [PineScript™ v5 Manual](https://www.tradingview.com/pine-script-docs/en/v5/language)

@@ -2,8 +2,6 @@
 #include "tree_sitter/array.h"
 #include "tree_sitter/parser.h"
 
-#include <stdio.h>
-
 enum TokenType {
 	INDENT,
 	DEDENT,

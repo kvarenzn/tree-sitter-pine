@@ -97,7 +97,7 @@
           "name": "consequence",
           "content": {
             "type": "SYMBOL",
-            "name": "_block"
+            "name": "_suite"
           }
         },
         {
@@ -153,7 +153,7 @@
           "name": "consequence",
           "content": {
             "type": "SYMBOL",
-            "name": "_block"
+            "name": "_suite"
           }
         }
       ]
@@ -170,7 +170,7 @@
           "name": "consequence",
           "content": {
             "type": "SYMBOL",
-            "name": "_block"
+            "name": "_suite"
           }
         }
       ]
@@ -325,7 +325,7 @@
           "name": "body",
           "content": {
             "type": "SYMBOL",
-            "name": "_block"
+            "name": "_suite"
           }
         }
       ]
@@ -400,7 +400,7 @@
           "name": "body",
           "content": {
             "type": "SYMBOL",
-            "name": "_block"
+            "name": "_suite"
           }
         }
       ]
@@ -425,7 +425,7 @@
           "name": "body",
           "content": {
             "type": "SYMBOL",
-            "name": "_block"
+            "name": "_suite"
           }
         }
       ]
@@ -702,12 +702,8 @@
                   "name": "initial_value",
                   "content": {
                     "type": "SYMBOL",
-                    "name": "expression"
+                    "name": "expression_statement"
                   }
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "_newline"
                 }
               ]
             },
@@ -829,7 +825,7 @@
           "name": "value",
           "content": {
             "type": "SYMBOL",
-            "name": "expression"
+            "name": "expression_statement"
           }
         }
       ]
@@ -1017,7 +1013,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "_block"
+                "name": "_suite"
               }
             ]
           }
@@ -1805,8 +1801,41 @@
       ]
     },
     "import_path": {
-      "type": "PATTERN",
-      "value": "[^\\/\\s]+\\/[^\\/\\s]+\\/[^\\/\\s]+"
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "username",
+          "content": {
+            "type": "PATTERN",
+            "value": "[^\\/\\s]+"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "/"
+        },
+        {
+          "type": "FIELD",
+          "name": "export",
+          "content": {
+            "type": "PATTERN",
+            "value": "[^\\/\\s]+"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "/"
+        },
+        {
+          "type": "FIELD",
+          "name": "version",
+          "content": {
+            "type": "PATTERN",
+            "value": "[^\\/\\s]+"
+          }
+        }
+      ]
     },
     "expression_statement": {
       "type": "SEQ",
@@ -1831,6 +1860,10 @@
         {
           "type": "SYMBOL",
           "name": "comparison_operation"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "logical_operation"
         },
         {
           "type": "SYMBOL",
@@ -3078,13 +3111,36 @@
         }
       }
     },
-    "_block": {
-      "type": "SEQ",
+    "_suite": {
+      "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_indent"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_indent"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "block"
+            }
+          ]
         },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_newline"
+          },
+          "named": true,
+          "value": "block"
+        }
+      ]
+    },
+    "block": {
+      "type": "SEQ",
+      "members": [
         {
           "type": "REPEAT",
           "content": {
@@ -3099,19 +3155,97 @@
       ]
     },
     "comment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "//"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "[^\\n]+"
+                  }
+                },
+                "named": true,
+                "value": "comment_content"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "annotations"
+              }
+            ]
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        }
+      ]
+    },
+    "annotations": {
       "type": "TOKEN",
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "//"
-          },
-          {
-            "type": "PATTERN",
-            "value": ".*"
-          }
-        ]
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "@"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "description"
+                },
+                {
+                  "type": "STRING",
+                  "value": "field"
+                },
+                {
+                  "type": "STRING",
+                  "value": "function"
+                },
+                {
+                  "type": "STRING",
+                  "value": "param"
+                },
+                {
+                  "type": "STRING",
+                  "value": "returns"
+                },
+                {
+                  "type": "STRING",
+                  "value": "streategy_alert_message"
+                },
+                {
+                  "type": "STRING",
+                  "value": "type"
+                },
+                {
+                  "type": "STRING",
+                  "value": "variable"
+                },
+                {
+                  "type": "STRING",
+                  "value": "version="
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     "line_continuation": {

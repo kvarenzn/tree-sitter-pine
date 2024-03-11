@@ -69,18 +69,18 @@ module.exports = grammar({
 		if_statement: $ => seq(
 			'if',
 			field('condition', $.expression),
-			field('consequence', $._block),
+			field('consequence', $._suite),
 			repeat(field('alternative', $.else_if_clause)),
 			optional(field('alternative', $.else_clause))
 		),
 		else_if_clause: $ => seq(
 			'else', 'if',
 			field('condition', $.expression),
-			field('consequence', $._block)
+			field('consequence', $._suite)
 		),
 		else_clause: $ => seq(
 			'else',
-			field('consequence', $._block)
+			field('consequence', $._suite)
 		),
 		switch_statement: $ => seq(
 			'switch',
@@ -107,7 +107,7 @@ module.exports = grammar({
 				'by',
 				field('step_num', $.expression)
 			)),
-			field('body', $._block),
+			field('body', $._suite),
 
 		),
 		for_in_statement: $ => seq(
@@ -124,12 +124,12 @@ module.exports = grammar({
 			),
 			'in',
 			field('array_id', $.expression),
-			field('body', $._block)
+			field('body', $._suite)
 		),
 		while_statement: $ => seq(
 			'while',
 			field('condition', $.expression),
-			field('body', $._block)
+			field('body', $._suite)
 		),
 		break_statement: $ => seq('break', $._newline),
 		continue_statement: $ => seq('continue', $._newline),
@@ -173,8 +173,7 @@ module.exports = grammar({
 			'=',
 			choice(
 				seq(
-					field('initial_value', $.expression),
-					$._newline
+					field('initial_value', $.expression_statement),
 				),
 				seq(
 					field('initial_structure', $._structure)
@@ -191,7 +190,7 @@ module.exports = grammar({
 		reassignment_statement: $ => seq(
 			field('variable', choice($.identifier, $.attribute)),
 			':=',
-			field('value', $.expression)
+			field('value', $.expression_statement)
 		),
 		argumented_assignment: $ => seq(
 			field('left', $.identifier),
@@ -231,7 +230,7 @@ module.exports = grammar({
 		),
 		_arm_body: $ => field('body', seq('=>', choice(
 			$.statement,
-			$._block
+			$._suite
 		))),
 		_argument_list_with_type: $ => seq(
 			'(',
@@ -303,7 +302,13 @@ module.exports = grammar({
 			)),
 			$._newline
 		),
-		import_path: _ => /[^\/\s]+\/[^\/\s]+\/[^\/\s]+/,
+		import_path: _ => seq(
+			field('username', /[^\/\s]+/),
+			'/',
+			field('export', /[^\/\s]+/),
+			'/',
+			field('version', /[^\/\s]+/)
+		),
 		expression_statement: $ => seq(
 			$.expression,
 			$._newline
@@ -311,6 +316,7 @@ module.exports = grammar({
 		expression: $ => choice(
 			$.conditional_expression,
 			$.comparison_operation,
+			$.logical_operation,
 			$.math_operation,
 			$.unary_operation,
 			$.template_argument_list,
@@ -500,12 +506,36 @@ module.exports = grammar({
 				/U[0-9a-fA-F]{8}/,
 			)
 		))),
-		_block: $ => seq(
-			$._indent,
+		_suite: $ => choice(
+			seq($._indent, $.block),
+			alias($._newline, $.block)
+		),
+		block: $ => seq(
 			repeat($.statement),
 			$._dedent
 		),
-		comment: _ => token(seq('//', /.*/)),
+		comment: $ => seq(
+			'//',
+			repeat(choice(
+				alias(token.immediate(/[^\n]+/), $.comment_content),
+				$.annotations
+			)),
+			$._newline
+		),
+		annotations: _ => token(prec(1, seq(
+			'@', 
+			choice(
+				'description',
+				'field',
+				'function',
+				'param',
+				'returns',
+				'streategy_alert_message',
+				'type',
+				'variable',
+				'version='
+			)
+		))),
 		line_continuation: _ => token(seq('\\', choice(seq(optional('\r'), '\n'), '\0')))
 	}
 })
