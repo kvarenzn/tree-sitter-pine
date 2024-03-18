@@ -53,7 +53,6 @@ module.exports = grammar({
 			$.expression_statement,
 			$.import_statement,
 			$.type_definition_statement,
-			$.variable_declaration_statement,
 			$.variable_definition_statement,
 			$.tuple_declaration_statement,
 			$.function_declaration_statement,
@@ -158,13 +157,6 @@ module.exports = grammar({
 				$._newline
 			)),
 			$._dedent
-		),
-		variable_declaration_statement: $ => seq(
-			optional(field('declaration_mode', $.declaration_mode)),
-			optional(field('qualifier', $.type_qualifier)),
-			field('type', $.type),
-			field('variable', $.identifier),
-			$._newline
 		),
 		variable_definition_statement: $ => seq(
 			optional(field('declaration_mode', $.declaration_mode)),

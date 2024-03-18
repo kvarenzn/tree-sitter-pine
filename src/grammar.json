@@ -25,10 +25,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "variable_declaration_statement"
-        },
-        {
-          "type": "SYMBOL",
           "name": "variable_definition_statement"
         },
         {
@@ -576,63 +572,6 @@
         {
           "type": "SYMBOL",
           "name": "_dedent"
-        }
-      ]
-    },
-    "variable_declaration_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "declaration_mode",
-              "content": {
-                "type": "SYMBOL",
-                "name": "declaration_mode"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "qualifier",
-              "content": {
-                "type": "SYMBOL",
-                "name": "type_qualifier"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "FIELD",
-          "name": "type",
-          "content": {
-            "type": "SYMBOL",
-            "name": "type"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "variable",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_newline"
         }
       ]
     },

@@ -158,10 +158,6 @@
         "named": true
       },
       {
-        "type": "variable_declaration_statement",
-        "named": true
-      },
-      {
         "type": "variable_definition_statement",
         "named": true
       },
@@ -1393,52 +1389,6 @@
           {
             "type": "not",
             "named": false
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "variable_declaration_statement",
-    "named": true,
-    "fields": {
-      "declaration_mode": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "declaration_mode",
-            "named": true
-          }
-        ]
-      },
-      "qualifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "type_qualifier",
-            "named": true
-          }
-        ]
-      },
-      "type": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "type",
-            "named": true
-          }
-        ]
-      },
-      "variable": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
           }
         ]
       }
