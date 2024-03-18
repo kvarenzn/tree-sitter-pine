@@ -183,12 +183,20 @@
           "value": "switch"
         },
         {
-          "type": "FIELD",
-          "name": "subject",
-          "content": {
-            "type": "SYMBOL",
-            "name": "expression"
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "subject",
+              "content": {
+                "type": "SYMBOL",
+                "name": "expression"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "REPEAT",
@@ -3321,6 +3329,9 @@
     [
       "_argument_list_with_type_optional",
       "_argument_list_with_type_optional1"
+    ],
+    [
+      "switch_statement"
     ]
   ],
   "precedences": [],

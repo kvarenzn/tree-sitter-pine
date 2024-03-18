@@ -24,7 +24,8 @@ module.exports = grammar({
 		[$.function_declaration_statement, $.primary_expression],
 		[$.primary_expression, $.base_type],
 		[$.tuple_declaration_statement, $.primary_expression],
-		[$._argument_list_with_type_optional, $._argument_list_with_type_optional1]
+		[$._argument_list_with_type_optional, $._argument_list_with_type_optional1],
+		[$.switch_statement]
 	],
 
 	inline: $ => [
@@ -84,7 +85,7 @@ module.exports = grammar({
 		),
 		switch_statement: $ => seq(
 			'switch',
-			field('subject', $.expression),
+			optional(field('subject', $.expression)),
 			repeat(field('body', seq(
 				$._indent,
 				repeat(field('arm', $.case_clause)),
