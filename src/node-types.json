@@ -241,7 +241,27 @@
         "required": true,
         "types": [
           {
-            "type": "expression",
+            "type": "expression_statement",
+            "named": true
+          },
+          {
+            "type": "for_in_statement",
+            "named": true
+          },
+          {
+            "type": "for_statement",
+            "named": true
+          },
+          {
+            "type": "if_statement",
+            "named": true
+          },
+          {
+            "type": "switch_statement",
+            "named": true
+          },
+          {
+            "type": "while_statement",
             "named": true
           }
         ]
@@ -1030,6 +1050,26 @@
         "types": [
           {
             "type": "expression_statement",
+            "named": true
+          },
+          {
+            "type": "for_in_statement",
+            "named": true
+          },
+          {
+            "type": "for_statement",
+            "named": true
+          },
+          {
+            "type": "if_statement",
+            "named": true
+          },
+          {
+            "type": "switch_statement",
+            "named": true
+          },
+          {
+            "type": "while_statement",
             "named": true
           }
         ]

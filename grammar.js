@@ -184,14 +184,14 @@ module.exports = grammar({
 		reassignment_statement: $ => seq(
 			field('variable', choice($.identifier, $.attribute)),
 			':=',
-			field('value', $.expression_statement)
+			field('value', choice($.expression_statement, $._structure))
 		),
 		argumented_assignment: $ => seq(
 			field('left', $.identifier),
 			field('operator', choice(
 				'+=', '-=', '*=', '/=', '%='
 			)),
-			field('right', $.expression)
+			field('right', choice($.expression_statement, $._structure))
 		),
 		declaration_mode: _ => choice(
 			'varip',
