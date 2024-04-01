@@ -21,10 +21,11 @@ module.exports = grammar({
 	],
 
 	conflicts: $ => [
-		[$.function_declaration_statement, $.primary_expression],
 		[$.primary_expression, $.base_type],
 		[$.tuple_declaration_statement, $.primary_expression],
-		[$._argument_list_with_type_optional, $._argument_list_with_type_optional1],
+		[$._argument_list_with_type_optional, $.primary_expression],
+		[$._argument_list_with_type_optional, $.keyword_argument],
+		[$.primary_expression, $.template_function],
 		[$.switch_statement]
 	],
 
@@ -196,85 +197,24 @@ module.exports = grammar({
 			'varip',
 			'var'
 		),
-		function_declaration_statement: $ => choice(
-			seq(
-				'export',
+		function_declaration_statement: $ => seq(
+			optional('export'),
+			choice(
+				seq(
+					'method',
+					field('method', $.identifier),
+				),
 				field('function', $.identifier),
-				$._argument_list_with_type,
-				$._arm_body
 			),
-			seq(
-				'export',
-				'method',
-				field('method', $.identifier),
-				$._argument_list_with_type1,
-				$._arm_body
-			),
-			seq(
-				field('function', $.identifier),
-				$._argument_list_with_type_optional,
-				$._arm_body
-			),
-			seq(
-				field('method', $.identifier),
-				$._argument_list_with_type_optional1,
-				$._arm_body
-			)
+			$._argument_list_with_type_optional,
+			$._arm_body
 		),
 		_arm_body: $ => field('body', seq('=>', choice(
 			$.statement,
 			$._suite
 		))),
-		_argument_list_with_type: $ => seq(
-			'(',
-			optional(sep1(seq(
-				optional(field('qualifier', $.type_qualifier)),
-				field('type', $.type),
-				field('argument', $.identifier),
-				optional(seq(
-					'=',
-					field('default_value', $.expression)
-				))
-			), ',')),
-			')'
-		),
-		_argument_list_with_type1: $ => seq(
-			'(',
-			sep1(seq(
-				optional(field('qualifier', $.type_qualifier)),
-				field('type', $.type),
-				field('argument', $.identifier),
-				optional(seq(
-					'=',
-					field('default_value', $.expression)
-				))
-			), ','),
-			')'
-		),
 		_argument_list_with_type_optional: $ => seq(
 			'(',
-			optional(sep1(seq(
-				optional(field('qualifier', $.type_qualifier)),
-				optional(field('type', $.type)),
-				field('argument', $.identifier),
-				optional(seq(
-					'=',
-					field('default_value', $.expression)
-				))
-			), ',')),
-			')'
-		),
-		_argument_list_with_type_optional1: $ => seq(
-			'(',
-			seq(
-				optional(field('qualifier', $.type_qualifier)),
-				field('type', $.type),
-				field('argument', $.identifier),
-				optional(seq(
-					'=',
-					field('default_value', $.expression)
-				))
-			),
 			optional(sep1(seq(
 				optional(field('qualifier', $.type_qualifier)),
 				optional(field('type', $.type)),
@@ -312,7 +252,6 @@ module.exports = grammar({
 			$.logical_operation,
 			$.math_operation,
 			$.unary_operation,
-			$.template_argument_list,
 			$.literals,
 			$.primary_expression,
 		),
@@ -326,7 +265,6 @@ module.exports = grammar({
 		literals: $ => choice(
 			$.true,
 			$.false,
-			$.na,
 			$.color,
 			$.integer,
 			$.float,
@@ -334,18 +272,13 @@ module.exports = grammar({
 			$.tuple,
 		),
 		template_function: $ => seq(
-			field('name', $.identifier),
+			field('name', $.attribute),
 			field('arguments', $.template_argument_list)
 		),
-		attribute: $ => prec.right(seq(
-			prec(PREC.attribute, seq(
-				field('object', $.primary_expression),
-				'.',
-			)),
-			field('attribute', choice(
-				$.identifier,
-				$.template_function,
-			))
+		attribute: $ => prec.right(PREC.attribute, seq(
+			field('object', $.primary_expression),
+			'.',
+			field('attribute', $.identifier)
 		)),
 		keyword_argument: $ => seq(
 			field('key', $.identifier),
@@ -361,7 +294,11 @@ module.exports = grammar({
 			')'
 		),
 		call: $ => prec(PREC.call, seq(
-			field('function', $.expression),
+			field('function', choice(
+				$.identifier,
+				$.attribute,
+				$.template_function
+			)),
 			field('arguments', $.argument_list)
 		)),
 		subscript: $ => prec(PREC.call, seq(
@@ -429,12 +366,8 @@ module.exports = grammar({
 		),
 		base_type: $ => sep1($.identifier, '.'),
 		array_type: $ => seq(
-			field('base_type', $._array_base_type),
+			field('base_type', $.base_type),
 			field('suffix', seq('[', ']'))
-		),
-		_array_base_type: $ => choice(
-			$.base_type,
-			$.array_type
 		),
 		generic_type: $ => seq(
 			field('base_type', $.base_type),
@@ -442,8 +375,8 @@ module.exports = grammar({
 		),
 		template_argument_list: $ => seq(
 			'<',
-			sep1($.type, ','),
-			alias(token(prec(1, '>')), '>')
+			sep1($.base_type, ','),
+			'>'
 		),
 		type_qualifier: _ => choice(
 			'series',
@@ -468,7 +401,6 @@ module.exports = grammar({
 		color: _ => token(/#[A-Fa-f0-9]{6}|#[A-Fa-f0-9]{8}/),
 		true: _ => 'true',
 		false: _ => 'false',
-		na: _ => 'na',
 		string: $ => choice(
 			$.single_quotted_string,
 			$.double_quotted_string,

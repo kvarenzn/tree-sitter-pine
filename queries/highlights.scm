@@ -30,6 +30,7 @@
    "map"
    "math"
    "matrix"
+   "na"
    "order"
    "plot"
    "polyline"
@@ -85,7 +86,7 @@
 (attribute attribute: (identifier) @property)
 
 (template_function
-  name: (identifier) @function)
+  name: (attribute attribute: (identifier) @function))
 
 (call
   function: (attribute attribute: (identifier) @function.method))
@@ -145,9 +146,8 @@
   "year"
   ))
 
-
 ((call
-   function: (attribute attribute: (template_function name: (identifier) @constructor)))
+   function: (template_function name: (attribute attribute: (identifier) @constructor)))
  (#eq? @constructor "new"))
 
 (function_declaration_statement
@@ -241,10 +241,6 @@
  "var"
  "varip"
  ] @keyword
-
-[
- (na)
- ] @constant.builtin
 
 [
  (true)

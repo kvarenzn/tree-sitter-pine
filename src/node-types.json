@@ -28,10 +28,6 @@
         "named": true
       },
       {
-        "type": "template_argument_list",
-        "named": true
-      },
-      {
         "type": "unary_operation",
         "named": true
       }
@@ -55,10 +51,6 @@
       },
       {
         "type": "integer",
-        "named": true
-      },
-      {
-        "type": "na",
         "named": true
       },
       {
@@ -265,10 +257,6 @@
         "required": true,
         "types": [
           {
-            "type": "array_type",
-            "named": true
-          },
-          {
             "type": "base_type",
             "named": true
           }
@@ -300,10 +288,6 @@
         "types": [
           {
             "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "template_function",
             "named": true
           }
         ]
@@ -374,7 +358,15 @@
         "required": true,
         "types": [
           {
-            "type": "expression",
+            "type": "attribute",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "template_function",
             "named": true
           }
         ]
@@ -1212,7 +1204,7 @@
       "required": true,
       "types": [
         {
-          "type": "type",
+          "type": "base_type",
           "named": true
         }
       ]
@@ -1237,7 +1229,7 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "attribute",
             "named": true
           }
         ]
@@ -1709,10 +1701,6 @@
   {
     "type": "method",
     "named": false
-  },
-  {
-    "type": "na",
-    "named": true
   },
   {
     "type": "not",
