@@ -22,7 +22,7 @@ module.exports = grammar({
 
 	conflicts: $ => [
 		[$.primary_expression, $.base_type],
-		[$.tuple_declaration_statement, $.primary_expression],
+		[$.tuple_declaration, $.primary_expression],
 		[$._argument_list_with_type_optional, $.primary_expression],
 		[$._argument_list_with_type_optional, $.keyword_argument],
 		[$.primary_expression, $.template_function],
@@ -51,21 +51,37 @@ module.exports = grammar({
 	rules: {
 		source_file: $ => repeat($.statement),
 		statement: $ => choice(
-			$.expression_statement,
-			$.import_statement,
 			$.type_definition_statement,
-			$.variable_definition_statement,
-			$.tuple_declaration_statement,
 			$.function_declaration_statement,
 			$.if_statement,
 			$.switch_statement,
 			$.for_statement,
 			$.for_in_statement,
 			$.while_statement,
-			$.reassignment_statement,
+			$.simple_statements,
+			$.simple_statement,
+		),
+		simple_statements: $ => seq(
+			repeat1(seq(
+				$._simple_stmt,
+				','
+			)),
+			optional($._simple_stmt),
+			$._newline
+		),
+		simple_statement: $ => seq(
+			$._simple_stmt,
+			$._newline
+		),
+		_simple_stmt: $ => choice(
+			$.expression,
+			$.tuple_declaration,
+			$.variable_definition,
+			$.reassignment,
 			$.argumented_assignment,
-			$.break_statement,
-			$.continue_statement,
+			$.break,
+			$.continue,
+			$.import,
 		),
 		if_statement: $ => seq(
 			'if',
@@ -132,8 +148,8 @@ module.exports = grammar({
 			field('condition', $.expression),
 			field('body', $._suite)
 		),
-		break_statement: $ => seq('break', $._newline),
-		continue_statement: $ => seq('continue', $._newline),
+		break: _ => 'break',
+		continue: _ => 'continue',
 		_structure: $ => choice(
 			$.if_statement,
 			$.for_statement,
@@ -159,7 +175,7 @@ module.exports = grammar({
 			)),
 			$._dedent
 		),
-		variable_definition_statement: $ => seq(
+		variable_definition: $ => seq(
 			optional(field('declaration_mode', $.declaration_mode)),
 			optional(field('qualifier', $.type_qualifier)),
 			optional(field('type', $.type)),
@@ -167,31 +183,31 @@ module.exports = grammar({
 			'=',
 			choice(
 				seq(
-					field('initial_value', $.expression_statement),
+					field('initial_value', $.expression),
 				),
 				seq(
 					field('initial_structure', $._structure)
 				)
 			)
 		),
-		tuple_declaration_statement: $ => seq(
+		tuple_declaration: $ => seq(
 			'[',
 			field('variables', sep1($.identifier, ',')),
 			']',
 			'=',
-			field('initial_value', choice(seq($.call, $._newline), $._structure))
+			field('initial_value', choice($.call, $._structure))
 		),
-		reassignment_statement: $ => seq(
+		reassignment: $ => seq(
 			field('variable', choice($.identifier, $.attribute)),
 			':=',
-			field('value', choice($.expression_statement, $._structure))
+			field('value', choice($.expression, $._structure))
 		),
 		argumented_assignment: $ => seq(
 			field('left', $.identifier),
 			field('operator', choice(
 				'+=', '-=', '*=', '/=', '%='
 			)),
-			field('right', choice($.expression_statement, $._structure))
+			field('right', choice($.expression, $._structure))
 		),
 		declaration_mode: _ => choice(
 			'varip',
@@ -226,14 +242,13 @@ module.exports = grammar({
 			), ',')),
 			')'
 		),
-		import_statement: $ => seq(
+		import: $ => seq(
 			'import',
 			field('path', $.import_path),
 			optional(seq(
 				'as',
 				field('alias', $.identifier)
 			)),
-			$._newline
 		),
 		import_path: _ => seq(
 			field('username', /[^\/\s]+/),
@@ -241,10 +256,6 @@ module.exports = grammar({
 			field('export', /[^\/\s]+/),
 			'/',
 			field('version', /[^\/\s]+/)
-		),
-		expression_statement: $ => seq(
-			$.expression,
-			$._newline
 		),
 		expression: $ => choice(
 			$.conditional_expression,

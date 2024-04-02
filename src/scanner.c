@@ -75,6 +75,11 @@ bool tree_sitter_pine_external_scanner_scan(void *payload, TSLexer *lexer, const
 	}
 
 next:
+	if (indent_length % 4 != 0) {
+		// line continue
+		return false;
+	}
+
 	if (found_end_of_line) {
 		if (scanner->indents.size > 0) {
 			uint16_t current_indent_length = *array_back(&scanner->indents);

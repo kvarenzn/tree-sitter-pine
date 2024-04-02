@@ -168,10 +168,10 @@
 (type_definition_statement
   name: (identifier) @type.definition)
 
-(import_statement
+(import
   path: (import_path) @label)
 
-(import_statement
+(import
   alias: (identifier) @define)
 
 (comparison_operation
@@ -221,8 +221,8 @@
  "in"
  "to"
  "by"
- "break"
- "continue"
+ (break)
+ (continue)
  ] @keyword
 
 [

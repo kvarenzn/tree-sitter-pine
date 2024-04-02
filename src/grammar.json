@@ -13,23 +13,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "expression_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "import_statement"
-        },
-        {
-          "type": "SYMBOL",
           "name": "type_definition_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "variable_definition_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "tuple_declaration_statement"
         },
         {
           "type": "SYMBOL",
@@ -57,7 +41,82 @@
         },
         {
           "type": "SYMBOL",
-          "name": "reassignment_statement"
+          "name": "simple_statements"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "simple_statement"
+        }
+      ]
+    },
+    "simple_statements": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_simple_stmt"
+              },
+              {
+                "type": "STRING",
+                "value": ","
+              }
+            ]
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_simple_stmt"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        }
+      ]
+    },
+    "simple_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_simple_stmt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        }
+      ]
+    },
+    "_simple_stmt": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "tuple_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "variable_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "reassignment"
         },
         {
           "type": "SYMBOL",
@@ -65,11 +124,15 @@
         },
         {
           "type": "SYMBOL",
-          "name": "break_statement"
+          "name": "break"
         },
         {
           "type": "SYMBOL",
-          "name": "continue_statement"
+          "name": "continue"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "import"
         }
       ]
     },
@@ -434,31 +497,13 @@
         }
       ]
     },
-    "break_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "break"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_newline"
-        }
-      ]
+    "break": {
+      "type": "STRING",
+      "value": "break"
     },
-    "continue_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "continue"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_newline"
-        }
-      ]
+    "continue": {
+      "type": "STRING",
+      "value": "continue"
     },
     "_structure": {
       "type": "CHOICE",
@@ -575,7 +620,7 @@
         }
       ]
     },
-    "variable_definition_statement": {
+    "variable_definition": {
       "type": "SEQ",
       "members": [
         {
@@ -649,7 +694,7 @@
                   "name": "initial_value",
                   "content": {
                     "type": "SYMBOL",
-                    "name": "expression_statement"
+                    "name": "expression"
                   }
                 }
               ]
@@ -671,7 +716,7 @@
         }
       ]
     },
-    "tuple_declaration_statement": {
+    "tuple_declaration": {
       "type": "SEQ",
       "members": [
         {
@@ -722,17 +767,8 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "call"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_newline"
-                  }
-                ]
+                "type": "SYMBOL",
+                "name": "call"
               },
               {
                 "type": "SYMBOL",
@@ -743,7 +779,7 @@
         }
       ]
     },
-    "reassignment_statement": {
+    "reassignment": {
       "type": "SEQ",
       "members": [
         {
@@ -775,7 +811,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "expression_statement"
+                "name": "expression"
               },
               {
                 "type": "SYMBOL",
@@ -834,7 +870,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "expression_statement"
+                "name": "expression"
               },
               {
                 "type": "SYMBOL",
@@ -1117,7 +1153,7 @@
         }
       ]
     },
-    "import_statement": {
+    "import": {
       "type": "SEQ",
       "members": [
         {
@@ -1156,10 +1192,6 @@
               "type": "BLANK"
             }
           ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_newline"
         }
       ]
     },
@@ -1197,19 +1229,6 @@
             "type": "PATTERN",
             "value": "[^\\/\\s]+"
           }
-        }
-      ]
-    },
-    "expression_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "expression"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_newline"
         }
       ]
     },
@@ -2632,7 +2651,7 @@
       "base_type"
     ],
     [
-      "tuple_declaration_statement",
+      "tuple_declaration",
       "primary_expression"
     ],
     [
