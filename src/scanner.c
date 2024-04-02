@@ -48,7 +48,7 @@ bool tree_sitter_pine_external_scanner_scan(void *payload, TSLexer *lexer, const
 				break;
 			}
 			case '\t': {
-				indent_length += 8;
+				indent_length += 4;
 				skip(lexer);
 				break;
 			}
