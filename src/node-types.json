@@ -114,6 +114,10 @@
         "named": true
       },
       {
+        "type": "reassignment_statement",
+        "named": true
+      },
+      {
         "type": "simple_statement",
         "named": true
       },
@@ -126,7 +130,15 @@
         "named": true
       },
       {
+        "type": "tuple_declaration_statement",
+        "named": true
+      },
+      {
         "type": "type_definition_statement",
+        "named": true
+      },
+      {
+        "type": "variable_definition_statement",
         "named": true
       },
       {
@@ -170,78 +182,6 @@
           "named": true
         }
       ]
-    }
-  },
-  {
-    "type": "argumented_assignment",
-    "named": true,
-    "fields": {
-      "left": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "operator": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "%=",
-            "named": false
-          },
-          {
-            "type": "*=",
-            "named": false
-          },
-          {
-            "type": "+=",
-            "named": false
-          },
-          {
-            "type": "-=",
-            "named": false
-          },
-          {
-            "type": "/=",
-            "named": false
-          }
-        ]
-      },
-      "right": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          },
-          {
-            "type": "for_in_statement",
-            "named": true
-          },
-          {
-            "type": "for_statement",
-            "named": true
-          },
-          {
-            "type": "if_statement",
-            "named": true
-          },
-          {
-            "type": "switch_statement",
-            "named": true
-          },
-          {
-            "type": "while_statement",
-            "named": true
-          }
-        ]
-      }
     }
   },
   {
@@ -995,6 +935,36 @@
     "type": "reassignment",
     "named": true,
     "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "%=",
+            "named": false
+          },
+          {
+            "type": "*=",
+            "named": false
+          },
+          {
+            "type": "+=",
+            "named": false
+          },
+          {
+            "type": "-=",
+            "named": false
+          },
+          {
+            "type": "/=",
+            "named": false
+          },
+          {
+            "type": ":=",
+            "named": false
+          }
+        ]
+      },
       "value": {
         "multiple": false,
         "required": true,
@@ -1002,7 +972,59 @@
           {
             "type": "expression",
             "named": true
+          }
+        ]
+      },
+      "variable": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "reassignment_statement",
+    "named": true,
+    "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "%=",
+            "named": false
           },
+          {
+            "type": "*=",
+            "named": false
+          },
+          {
+            "type": "+=",
+            "named": false
+          },
+          {
+            "type": "-=",
+            "named": false
+          },
+          {
+            "type": "/=",
+            "named": false
+          },
+          {
+            "type": ":=",
+            "named": false
+          }
+        ]
+      },
+      "structure": {
+        "multiple": false,
+        "required": true,
+        "types": [
           {
             "type": "for_in_statement",
             "named": true
@@ -1030,10 +1052,6 @@
         "required": true,
         "types": [
           {
-            "type": "attribute",
-            "named": true
-          },
-          {
             "type": "identifier",
             "named": true
           }
@@ -1049,10 +1067,6 @@
       "multiple": false,
       "required": true,
       "types": [
-        {
-          "type": "argumented_assignment",
-          "named": true
-        },
         {
           "type": "break",
           "named": true
@@ -1092,10 +1106,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "argumented_assignment",
-          "named": true
-        },
         {
           "type": "break",
           "named": true
@@ -1339,7 +1349,33 @@
           {
             "type": "call",
             "named": true
+          }
+        ]
+      },
+      "variables": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": ",",
+            "named": false
           },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "tuple_declaration_statement",
+    "named": true,
+    "fields": {
+      "initial_structure": {
+        "multiple": false,
+        "required": true,
+        "types": [
           {
             "type": "for_in_statement",
             "named": true
@@ -1477,9 +1513,65 @@
           }
         ]
       },
-      "initial_structure": {
+      "initial_value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "qualifier": {
         "multiple": false,
         "required": false,
+        "types": [
+          {
+            "type": "type_qualifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      },
+      "variable": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "variable_definition_statement",
+    "named": true,
+    "fields": {
+      "declaration_mode": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "declaration_mode",
+            "named": true
+          }
+        ]
+      },
+      "initial_structure": {
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "for_in_statement",
@@ -1499,16 +1591,6 @@
           },
           {
             "type": "while_statement",
-            "named": true
-          }
-        ]
-      },
-      "initial_value": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "expression",
             "named": true
           }
         ]

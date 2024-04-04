@@ -22,6 +22,7 @@ module.exports = grammar({
 
 	conflicts: $ => [
 		[$.primary_expression, $.base_type],
+		[$.tuple_declaration, $.tuple_declaration_statement, $.primary_expression],
 		[$.tuple_declaration, $.primary_expression],
 		[$._argument_list_with_type_optional, $.primary_expression],
 		[$._argument_list_with_type_optional, $.keyword_argument],
@@ -58,6 +59,9 @@ module.exports = grammar({
 			$.for_statement,
 			$.for_in_statement,
 			$.while_statement,
+			$.variable_definition_statement,
+			$.tuple_declaration_statement,
+			$.reassignment_statement,
 			$.simple_statements,
 			$.simple_statement,
 		),
@@ -78,7 +82,6 @@ module.exports = grammar({
 			$.tuple_declaration,
 			$.variable_definition,
 			$.reassignment,
-			$.argumented_assignment,
 			$.break,
 			$.continue,
 			$.import,
@@ -181,33 +184,43 @@ module.exports = grammar({
 			optional(field('type', $.type)),
 			field('variable', $.identifier),
 			'=',
-			choice(
-				seq(
-					field('initial_value', $.expression),
-				),
-				seq(
-					field('initial_structure', $._structure)
-				)
-			)
+			field('initial_value', $.expression),
+		),
+		variable_definition_statement: $ => seq(
+			optional(field('declaration_mode', $.declaration_mode)),
+			optional(field('qualifier', $.type_qualifier)),
+			optional(field('type', $.type)),
+			field('variable', $.identifier),
+			'=',
+			field('initial_structure', $._structure)
 		),
 		tuple_declaration: $ => seq(
 			'[',
 			field('variables', sep1($.identifier, ',')),
 			']',
 			'=',
-			field('initial_value', choice($.call, $._structure))
+			field('initial_value', $.call)
+		),
+		tuple_declaration_statement: $ => seq(
+			'[',
+			field('variables', sep1($.identifier, ',')),
+			']',
+			'=',
+			field('initial_structure', $._structure)
 		),
 		reassignment: $ => seq(
-			field('variable', choice($.identifier, $.attribute)),
-			':=',
-			field('value', choice($.expression, $._structure))
-		),
-		argumented_assignment: $ => seq(
-			field('left', $.identifier),
+			field('variable', $.identifier),
 			field('operator', choice(
-				'+=', '-=', '*=', '/=', '%='
+				':=', '+=', '-=', '*=', '/=', '%='
 			)),
-			field('right', choice($.expression, $._structure))
+			field('value', $.expression)
+		),
+		reassignment_statement: $ => seq(
+			field('variable', $.identifier),
+			field('operator', choice(
+				':=', '+=', '-=', '*=', '/=', '%='
+			)),
+			field('structure', $._structure)
 		),
 		declaration_mode: _ => choice(
 			'varip',
@@ -427,7 +440,7 @@ module.exports = grammar({
 		double_quotted_string: $ => seq(
 			'"',
 			repeat(choice(
-				alias(token.immediate(prec(1, /[^\\"\n]+/)), $.string_content),
+				alias(token.immediate(prec(1, /[^\\"]+/)), $.string_content),
 				$.escape_sequence
 			)),
 			'"',
