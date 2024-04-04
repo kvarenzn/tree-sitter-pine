@@ -208,15 +208,19 @@ module.exports = grammar({
 			'=',
 			field('initial_structure', $._structure)
 		),
+		_lhs: $ => choice(
+			$.attribute,
+			$.identifier
+		),
 		reassignment: $ => seq(
-			field('variable', $.identifier),
+			field('variable', $._lhs),
 			field('operator', choice(
 				':=', '+=', '-=', '*=', '/=', '%='
 			)),
 			field('value', $.expression)
 		),
 		reassignment_statement: $ => seq(
-			field('variable', $.identifier),
+			field('variable', $._lhs),
 			field('operator', choice(
 				':=', '+=', '-=', '*=', '/=', '%='
 			)),

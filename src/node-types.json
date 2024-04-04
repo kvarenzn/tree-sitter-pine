@@ -980,6 +980,10 @@
         "required": true,
         "types": [
           {
+            "type": "attribute",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           }
@@ -1051,6 +1055,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "attribute",
+            "named": true
+          },
           {
             "type": "identifier",
             "named": true
