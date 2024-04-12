@@ -156,6 +156,9 @@
 (function_declaration_statement
   argument: (identifier) @variable.parameter)
 
+(function_declaration_statement
+  method: (identifier) @method)
+
 (keyword_argument
   key: (identifier) @variable.parameter)
 
