@@ -159,6 +159,9 @@
 (function_declaration_statement
   method: (identifier) @method)
 
+(function_declaration_statement
+  ["(" ")"] @punctuation.bracket)
+
 (keyword_argument
   key: (identifier) @variable.parameter)
 
@@ -166,7 +169,10 @@
   ["(" ")"] @operator)
 
 (template_argument_list
-  ["<" ">"] @punctuation)
+  ["<" ">"] @punctuation.bracket)
+
+(type_definition_statement
+  ["type"] @keyword.type)
 
 (type_definition_statement
   name: (identifier) @type.definition)
@@ -181,10 +187,10 @@
   ["<" ">"] @operator)
 
 (conditional_expression
-  ["?" ":"] @conditional)
+  ["?" ":"] @keyword.conditional.ternary)
 
 (parenthesized_expression
-  ["(" ")"] @operator)
+  ["(" ")"] @punctuation.bracket)
 
 [
  "="
@@ -203,47 +209,64 @@
  "/="
  "%"
  "%="
- "and"
- "or"
- "not"
- "["
- "]"
  "=>"
  ] @operator
 
-[
- ","
- ] @punctuation
+(function_declaration_statement
+  ["=>"] @keyword.function)
 
 [
- "type"
- "import"
- "as"
+ "and"
+ "or"
+ "not"
+ ] @keyword.operator
+
+[
+ ","
+ "."
+ ] @punctuation.delimiter
+
+[
+ "["
+ "]"
+ ] @punctuation.bracket
+
+[
  "export"
- "method"
- "in"
- "to"
- "by"
  (break)
  (continue)
  ] @keyword
 
 [
- "if" "else" "switch"
- ] @conditional
+ "method"
+ ] @keyword.modifier
 
-["for" "while"] @repeat
+[
+ "import"
+ "as"
+ ] @keyword.import
+
+[
+ "if" "else" "switch"
+ ] @keyword.conditional
+
+["for"
+ "while"
+ "in"
+ "to"
+ "by"
+ ] @keyword.repeat
 
 [
  "simple"
  "const"
  "series"
- ] @keyword
+ ] @keyword.modifier
 
 [
  "var"
  "varip"
- ] @keyword
+ ] @keyword.modifier
 
 [
  (true)
@@ -251,14 +274,14 @@
  ] @boolean
 
 (integer) @number
-(float) @float
+(float) @number.float
 (color) @string.special
 
 (string) @string
 (escape_sequence) @string.escape
 
 (comment) @comment
-(annotations) @text.reference
+(annotations) @markup.strong
 
 (base_type
   (identifier) @type)
