@@ -83,19 +83,19 @@
    "year"
    ))
 
-(attribute attribute: (identifier) @property)
+(attribute attribute: (identifier) @variable.member)
 
 (template_function
   name: (attribute attribute: (identifier) @function))
 
 (call
-  function: (attribute attribute: (identifier) @function.method))
+  function: (attribute attribute: (identifier) @function.method.call))
 
 (call
-  function: (identifier) @function)
+  function: (identifier) @function.call)
 
 (call
-  function: (attribute attribute: (identifier) @function))
+  function: (attribute attribute: (identifier) @function.call))
 
 ((call
    function: (attribute attribute: (identifier) @constructor))
@@ -157,7 +157,7 @@
   argument: (identifier) @variable.parameter)
 
 (function_declaration_statement
-  method: (identifier) @method)
+  method: (identifier) @function.method)
 
 (function_declaration_statement
   ["(" ")"] @punctuation.bracket)
@@ -178,10 +178,10 @@
   name: (identifier) @type.definition)
 
 (import
-  path: (import_path) @label)
+  path: (import_path) @string.special.path)
 
 (import
-  alias: (identifier) @define)
+  alias: (identifier) @module)
 
 (comparison_operation
   ["<" ">"] @operator)
